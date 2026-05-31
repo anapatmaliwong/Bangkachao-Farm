@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บางกะเจ้าฟาร์ม | Bangkachao Farm</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+    <style>
+        :root {
+            --primary-green: #4C723A;
+            --light-green: #899B72;
+            --earth-brown: #A07855;
+            --text-dark: #333333;
+            
+            --gradient-bg: linear-gradient(180deg, #F9F6F0 0%, #EAE5D9 100%);
+            --gradient-hero: linear-gradient(135deg, #4C723A 0%, #899B72 100%);
+            --gradient-text: linear-gradient(90deg, #4C723A 0%, #A07855 100%);
+        }
+
+        body {
+            font-family: 'Sarabun', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: var(--gradient-bg);
+            background-attachment: fixed;
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* เอฟเฟกต์ Grid จางๆ ตามเมาส์ */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+            background-size: 40px 40px;
+            -webkit-mask-image: radial-gradient(circle 250px at var(--mouse-x, -500px) var(--mouse-y, -500px), black 0%, transparent 100%);
+            mask-image: radial-gradient(circle 250px at var(--mouse-x, -500px) var(--mouse-y, -500px), black 0%, transparent 100%);
+            transition: opacity 0.3s;
+        }
+
+        /* Gradient Text */
+        h2 {
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            z-index: 1;
+            display: inline-block;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 120px 20px;
+            background: var(--gradient-hero);
+            color: white;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(76, 114, 58, 0.2);
+        }
+        .hero h1 {
+            background: linear-gradient(to right, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 3.5em;
+            margin: 0 0 10px 0;
+            position: relative;
+            z-index: 1;
+        }
+        .hero p {
+            font-size: 1.2em;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sections */
+        .section {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            margin-bottom: 80px;
+        }
+        .section.reverse {
+            flex-direction: row-reverse;
+        }
+        .section-text {
+            flex: 1;
+        }
+        .section-text p {
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        /* 3D Image Container */
+        .tilt-container {
+            flex: 1;
+            height: 320px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        
+        .tilt-img {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e0e0e0 0%, #cccccc 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            transform-style: preserve-3d;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+            /* ลบ transition ออกจาก CSS หลัก เพื่อให้ JS ควบคุมความสมูทแบบแยกสถานะ */
+        }
+
+        .tilt-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            transform: translateZ(40px); /* ให้รูปลอยขึ้นมาจากพื้นหลัง */
+            pointer-events: none; /* ป้องกันบัคเวลาเมาส์ไปโดนรูปตรงๆ */
+        }
+
+        /* Gallery */
+        .gallery-title {
+            text-align: center;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+        }
+        .gallery .tilt-container {
+            height: 220px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--gradient-hero);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        footer h3 {
+            color: white;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        footer p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 12px 0;
+            font-size: 1.1em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        footer i {
+            font-size: 1.4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-overlay"></div>
+
+    <header class="hero">
+        <h1>บางกะเจ้าฟาร์ม</h1>
+        <p>หลีกหนีความวุ่นวาย มาพักกายใจที่ฟาร์มออร์แกนิกกลาง "ปอดกรุงเทพฯ"</p>
+    </header>
+
+    <div class="container">
+        
+        <div class="section">
+            <div class="section-text">
+                <h2>เกี่ยวกับเรา</h2>
+                <p>จากความตั้งใจของเกษตรกรกว่า 17 รายที่รวมกลุ่มกัน เกิดเป็น <strong>"บางกะเจ้าฟาร์ม"</strong> แหล่งท่องเที่ยวเชิงเกษตรแบบออร์แกนิกในคุ้งบางกะเจ้า เรามุ่งเน้นการปลูกพืชผักและปศุสัตว์แบบปลอดสารพิษ เพื่อส่งมอบความสดชื่น ร่มรื่น และพื้นที่แห่งความสุขให้กับทุกคน</p>
+            </div>
+            <div class="tilt-container">
+                <div class="tilt-img">
+                    <img src="616027847_1352836976646112_228921416635449356_n.jpg" alt="บรรยากาศด้านหน้าบางกะเจ้าฟาร์ม">
+                </div>
+            </div>
+        </div>
+
+        <div class="section reverse">
+            <div class="section-text">
+                <h2>กิจกรรมและแปลงฟาร์ม</h2>
+                <p>เดินเล่นรับลมชมแปลงผักออร์แกนิกนานาชนิด แวะทักทายฝูงเป็ดและห่านที่เดินเตาะแตะอย่างอิสระซึ่งเป็นไฮไลท์ของฟาร์ม นอกจากนี้ยังมีโรงเพาะเห็ดสไตล์ญี่ปุ่น และกิจกรรมเวิร์กชอปทำผลิตภัณฑ์จากธรรมชาติให้คุณได้ร่วมสนุก</p>
+            </div>
+            <div class="tilt-container">
+                <div class="tilt-img">
+                    <img src="638872896_1383911093538700_7929235259754230361_n.jpg" alt="แปลงผักออร์แกนิก">
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-text">
+                <h2>Farm Café & Restaurant</h2>
+                <p>พักจิบเครื่องดื่มเย็นๆ กาแฟหอมกรุ่น และวาฟเฟิลแสนอร่อยที่ Farm Café พร้อมชิมอาหารที่ปรุงจากวัตถุดิบออร์แกนิกสดๆ จากฟาร์ม (เช่น เลมอนชิกเก้น) อย่าลืมขึ้นไปนั่งชิลที่โซนชั้น 2 เพื่อชมวิวทิวทัศน์สีเขียวของฟาร์มแบบพาโนรามา</p>
+            </div>
+            <div class="tilt-container">
+                <div class="tilt-img">
+                    <img src="658833253_1413965427199933_5421865744624748009_n.jpg" alt="บรรยากาศร้านคาเฟ่">
+                </div>
+            </div>
+        </div>
+
+        <div class="gallery-title">
+            <h2>แกลลอรี่</h2>
+        </div>
+        <div class="gallery">
+            <div class="tilt-container">
+                <div class="tilt-img">
+                    <img src="657149634_1413965210533288_946991795011280789_n.jpg" alt="ฝูงเป็ดริมน้ำ">
+                </div>
+            </div>
+            <div class="tilt-container">
+                <div class="tilt-img">
+                    <img src="660601935_1415624230367386_2798272487091556794_n.jpg" alt="ผักออร์แกนิกสดๆ">
+                </div>
+            </div>
+            <div class="tilt-container">
+                <div class="tilt-img">
+                    <img src="616027847_1352836976646112_228921416635449356_n.jpg" alt="ตัวอาคารฟาร์ม">
+                </div>
+            </div>
+            <div class="tilt-container">
+                <div class="tilt-img">
+                    <img src="658833253_1413965427199933_5421865744624748009_n.jpg" alt="บรรยากาศคาเฟ่">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <h3>ติดต่อเรา</h3>
+        <p><i class="ti ti-map-pin"></i> ซอยเพชรหึงษ์ 21 ตำบลบางยอ อำเภอพระประแดง จังหวัดสมุทรปราการ</p>
+        <p><i class="ti ti-clock"></i> เปิดให้บริการทุกวัน เวลา 09:30 น. - 16:30 น.</p>
+        <p style="margin-top: 40px; font-size: 0.9em; opacity: 0.7;">© 2026 Bangkachao Farm. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 1. Grid ตามเมาส์
+        document.addEventListener('mousemove', (e) => {
+            document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+            document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+        });
+
+        // 2. เอฟเฟกต์รูปภาพ 3D พร้อมระบบ Spring Bounce กลับนุ่มนวล
+        const tiltContainers = document.querySelectorAll('.tilt-container');
+
+        tiltContainers.forEach(container => {
+            const imgEl = container.querySelector('.tilt-img');
+
+            // เมื่อเมาส์เข้ามาในกรอบ: ปรับ Transition ให้น้อยลงเพื่อตามเมาส์ได้ทันที
+            container.addEventListener('mouseenter', () => {
+                imgEl.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
+            });
+
+            // คำนวณองศาตามเมาส์
+            container.addEventListener('mousemove', (e) => {
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = ((y - centerY) / centerY) * -15; // ปรับความแรงการหมุนตรงนี้
+                const rotateY = ((x - centerX) / centerX) * 15;
+
+                imgEl.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                imgEl.style.boxShadow = `${-rotateY * 1.5}px ${rotateX * 1.5}px 30px rgba(76, 114, 58, 0.3)`;
+            });
+
+            // **ไฮไลท์** เมื่อเมาส์ออก: เพิ่มเวลา Transition และใส่ cubic-bezier ให้ดูหน่วงและมีแรงสปริงเบาๆ
+            container.addEventListener('mouseleave', () => {
+                imgEl.style.transition = 'transform 0.8s cubic-bezier(0.2, 1.2, 0.3, 1), box-shadow 0.8s ease';
+                imgEl.style.transform = 'rotateX(0deg) rotateY(0deg)';
+                imgEl.style.boxShadow = '0 15px 30px rgba(0,0,0,0.1)';
+            });
+        });
+    </script>
+</body>
+</html>
