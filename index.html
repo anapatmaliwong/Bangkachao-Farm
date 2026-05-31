@@ -39,35 +39,50 @@
       color: var(--ink);
       font-family: var(--sans);
       overflow-x: hidden;
-      cursor: none;
+      /* disable text selection */
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      /* disable highlight color on tap (mobile) */
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* ─── CUSTOM CURSOR ─────────────────────────────── */
-    #cursor-dot {
-      position: fixed; top: 0; left: 0; z-index: 99999;
-      width: 8px; height: 8px;
-      background: var(--moss);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition: transform 0.05s linear, background 0.3s;
+    /* custom cursor — desktop only */
+    @media (pointer: fine) {
+      body { cursor: none; }
+
+      #cursor-dot {
+        position: fixed; top: 0; left: 0; z-index: 99999;
+        width: 8px; height: 8px;
+        background: var(--moss);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition: transform 0.05s linear, background 0.3s;
+      }
+      #cursor-ring {
+        position: fixed; top: 0; left: 0; z-index: 99998;
+        width: 36px; height: 36px;
+        border: 1.5px solid var(--moss);
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition: transform 0.18s var(--ease-out-expo), width 0.3s, height 0.3s, opacity 0.3s, border-color 0.3s;
+        opacity: 0.6;
+      }
+      body.cursor-hover #cursor-ring {
+        width: 60px; height: 60px;
+        border-color: var(--gold);
+        opacity: 1;
+      }
+      body.cursor-hover #cursor-dot { background: var(--gold); }
     }
-    #cursor-ring {
-      position: fixed; top: 0; left: 0; z-index: 99998;
-      width: 36px; height: 36px;
-      border: 1.5px solid var(--moss);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      transition: transform 0.18s var(--ease-out-expo), width 0.3s, height 0.3s, opacity 0.3s, border-color 0.3s;
-      opacity: 0.6;
+
+    /* mobile — hide cursor elements entirely */
+    @media (pointer: coarse) {
+      #cursor-dot, #cursor-ring { display: none !important; }
     }
-    body.cursor-hover #cursor-ring {
-      width: 60px; height: 60px;
-      border-color: var(--gold);
-      opacity: 1;
-    }
-    body.cursor-hover #cursor-dot { background: var(--gold); }
 
     /* ─── NOISE TEXTURE overlay ─────────────────────── */
     body::before {
