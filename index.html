@@ -1,316 +1,1577 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>บางกะเจ้าฟาร์ม | Bangkachao Farm</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-    <style>
-        :root {
-            --primary-green: #4C723A;
-            --light-green: #899B72;
-            --earth-brown: #A07855;
-            --text-dark: #333333;
-            
-            --gradient-bg: linear-gradient(180deg, #F9F6F0 0%, #EAE5D9 100%);
-            --gradient-hero: linear-gradient(135deg, #4C723A 0%, #899B72 100%);
-            --gradient-text: linear-gradient(90deg, #4C723A 0%, #A07855 100%);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บางกะเจ้าฟาร์ม | Bangkachao Farm</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Sarabun:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,600&display=swap" rel="stylesheet">
 
-        body {
-            font-family: 'Sarabun', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-image: var(--gradient-bg);
-            background-attachment: fixed;
-            color: var(--text-dark);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* เอฟเฟกต์ Grid จางๆ ตามเมาส์ */
-        .grid-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 9999;
-            background-image: 
-                linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
-            background-size: 40px 40px;
-            -webkit-mask-image: radial-gradient(circle 250px at var(--mouse-x, -500px) var(--mouse-y, -500px), black 0%, transparent 100%);
-            mask-image: radial-gradient(circle 250px at var(--mouse-x, -500px) var(--mouse-y, -500px), black 0%, transparent 100%);
-            transition: opacity 0.3s;
-        }
+    :root {
+      --ink:        #1a1a14;
+      --forest:     #2e5233;
+      --moss:       #4c7c3a;
+      --sage:       #7fa46a;
+      --mist:       #c8d5b5;
+      --cream:      #f5f0e8;
+      --parchment:  #ede7d5;
+      --earth:      #8a6445;
+      --clay:       #c4936a;
+      --gold:       #c9a84c;
+      --white:      #fdfaf4;
 
-        /* Gradient Text */
-        h2 {
-            background: var(--gradient-text);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-            position: relative;
-            z-index: 1;
-            display: inline-block;
-            font-size: 2.2em;
-            margin-bottom: 15px;
-        }
+      --serif-display: 'Cormorant Garamond', Georgia, serif;
+      --serif-body:    'Playfair Display', Georgia, serif;
+      --sans:          'Sarabun', sans-serif;
 
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 120px 20px;
-            background: var(--gradient-hero);
-            color: white;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(76, 114, 58, 0.2);
-        }
-        .hero h1 {
-            background: linear-gradient(to right, #ffffff, #e0e0e0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 3.5em;
-            margin: 0 0 10px 0;
-            position: relative;
-            z-index: 1;
-        }
-        .hero p {
-            font-size: 1.2em;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-            color: rgba(255, 255, 255, 0.9);
-        }
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring:   cubic-bezier(0.2, 1.4, 0.4, 1);
+    }
 
-        /* Container */
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 60px 20px;
-            position: relative;
-            z-index: 1;
-        }
+    html { scroll-behavior: smooth; }
 
-        /* Sections */
-        .section {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-            margin-bottom: 80px;
-        }
-        .section.reverse {
-            flex-direction: row-reverse;
-        }
-        .section-text {
-            flex: 1;
-        }
-        .section-text p {
-            font-size: 1.1em;
-            color: #555;
-        }
+    body {
+      background: var(--white);
+      color: var(--ink);
+      font-family: var(--sans);
+      overflow-x: hidden;
+      cursor: none;
+    }
 
-        /* 3D Image Container */
-        .tilt-container {
-            flex: 1;
-            height: 320px;
-            perspective: 1000px;
-            cursor: pointer;
-        }
-        
-        .tilt-img {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #e0e0e0 0%, #cccccc 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            transform-style: preserve-3d;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-            /* ลบ transition ออกจาก CSS หลัก เพื่อให้ JS ควบคุมความสมูทแบบแยกสถานะ */
-        }
+    /* ─── CUSTOM CURSOR ─────────────────────────────── */
+    #cursor-dot {
+      position: fixed; top: 0; left: 0; z-index: 99999;
+      width: 8px; height: 8px;
+      background: var(--moss);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: transform 0.05s linear, background 0.3s;
+    }
+    #cursor-ring {
+      position: fixed; top: 0; left: 0; z-index: 99998;
+      width: 36px; height: 36px;
+      border: 1.5px solid var(--moss);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: transform 0.18s var(--ease-out-expo), width 0.3s, height 0.3s, opacity 0.3s, border-color 0.3s;
+      opacity: 0.6;
+    }
+    body.cursor-hover #cursor-ring {
+      width: 60px; height: 60px;
+      border-color: var(--gold);
+      opacity: 1;
+    }
+    body.cursor-hover #cursor-dot { background: var(--gold); }
 
-        .tilt-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 20px;
-            transform: translateZ(40px); /* ให้รูปลอยขึ้นมาจากพื้นหลัง */
-            pointer-events: none; /* ป้องกันบัคเวลาเมาส์ไปโดนรูปตรงๆ */
-        }
+    /* ─── NOISE TEXTURE overlay ─────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 9990;
+      pointer-events: none;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+    }
 
-        /* Gallery */
-        .gallery-title {
-            text-align: center;
-            width: 100%;
-            margin-bottom: 40px;
-        }
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 25px;
-        }
-        .gallery .tilt-container {
-            height: 220px;
-        }
+    /* ─── NAV ────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 48px;
+      mix-blend-mode: multiply;
+      transition: padding 0.4s var(--ease-out-expo), background 0.4s;
+    }
+    nav.scrolled {
+      padding: 14px 48px;
+      background: rgba(245,240,232,0.92);
+      backdrop-filter: blur(12px);
+      mix-blend-mode: normal;
+      border-bottom: 1px solid rgba(76,124,58,0.12);
+    }
+    .nav-logo {
+      font-family: var(--serif-display);
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    nav.scrolled .nav-logo { color: var(--forest); }
+    .nav-links { display: flex; gap: 36px; list-style: none; }
+    .nav-links a {
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    nav.scrolled .nav-links a { color: var(--earth); }
+    .nav-links a:hover { color: var(--gold) !important; }
 
-        /* Footer */
-        footer {
-            background: var(--gradient-hero);
-            color: white;
-            text-align: center;
-            padding: 50px 20px;
-            position: relative;
-            z-index: 1;
-        }
-        footer h3 {
-            color: white;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-        }
-        footer p {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin: 12px 0;
-            font-size: 1.1em;
-            color: rgba(255, 255, 255, 0.9);
-        }
-        footer i {
-            font-size: 1.4rem;
-        }
-    </style>
+    /* ─── HERO ────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      overflow: hidden;
+      background: var(--forest);
+    }
+
+    /* Layered botanical background */
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 110%, rgba(46,82,51,0.9) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 10% 20%, rgba(76,124,58,0.4) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 60% at 90% 10%, rgba(201,168,76,0.12) 0%, transparent 50%),
+        linear-gradient(175deg, #1a2e1c 0%, #2e5233 40%, #3d6b30 70%, #1e3a1e 100%);
+    }
+
+    /* Animated leaf shapes */
+    .leaf-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      overflow: hidden;
+    }
+    .leaf {
+      position: absolute;
+      border-radius: 50% 0 50% 0;
+      background: rgba(127,164,106,0.08);
+      animation: leafFloat linear infinite;
+    }
+    @keyframes leafFloat {
+      0%   { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 0.5; }
+      100% { transform: translate(var(--tx), var(--ty)) rotate(var(--r)) scale(var(--s)); opacity: 0; }
+    }
+
+    /* Grid lines overlay */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 0 24px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s var(--ease-out-expo) forwards;
+    }
+    .hero-eyebrow::before,
+    .hero-eyebrow::after {
+      content: '';
+      width: 40px; height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
+    }
+
+    .hero-title {
+      font-family: var(--serif-display);
+      font-size: clamp(4rem, 10vw, 9rem);
+      font-weight: 300;
+      line-height: 0.92;
+      color: var(--white);
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+      opacity: 0;
+      animation: fadeUp 1s 0.5s var(--ease-out-expo) forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--mist);
+      display: block;
+    }
+    .hero-title strong {
+      font-weight: 600;
+      color: var(--sage);
+      font-style: normal;
+    }
+
+    .hero-subtitle {
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 300;
+      color: rgba(200,213,181,0.8);
+      letter-spacing: 0.06em;
+      margin: 28px auto 0;
+      max-width: 480px;
+      line-height: 1.8;
+      opacity: 0;
+      animation: fadeUp 1s 0.8s var(--ease-out-expo) forwards;
+    }
+
+    .hero-cta {
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-top: 50px;
+      font-family: var(--sans);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      background: var(--gold);
+      padding: 16px 40px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.3s var(--ease-spring), box-shadow 0.3s;
+      opacity: 0;
+      animation: fadeUp 1s 1.1s var(--ease-out-expo) forwards;
+    }
+    .hero-cta:hover {
+      background: var(--clay);
+      color: var(--white);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 40px rgba(201,168,76,0.3);
+    }
+    .hero-cta svg { transition: transform 0.3s; }
+    .hero-cta:hover svg { transform: translateX(4px); }
+
+    .hero-scroll {
+      position: absolute; bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 10px;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(200,213,181,0.5);
+      z-index: 2;
+      opacity: 0;
+      animation: fadeIn 1s 1.6s ease forwards;
+    }
+    .hero-scroll-line {
+      width: 1px; height: 60px;
+      background: linear-gradient(to bottom, rgba(200,213,181,0.5), transparent);
+      animation: scrollPulse 2s 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleY(1); transform-origin: top; }
+      50% { transform: scaleY(0.5); transform-origin: top; }
+    }
+
+    /* ─── MARQUEE BAND ────────────────────────────────── */
+    .marquee-band {
+      background: var(--forest);
+      padding: 14px 0;
+      overflow: hidden;
+      border-top: 1px solid rgba(127,164,106,0.2);
+      border-bottom: 1px solid rgba(127,164,106,0.2);
+    }
+    .marquee-track {
+      display: flex;
+      animation: marquee 28s linear infinite;
+      white-space: nowrap;
+    }
+    .marquee-item {
+      display: inline-flex; align-items: center; gap: 16px;
+      padding: 0 32px;
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+    }
+    .marquee-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ─── SECTIONS BASE ───────────────────────────────── */
+    section { position: relative; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    /* ─── ABOUT ───────────────────────────────────────── */
+    .about {
+      background: var(--white);
+      padding: 140px 0;
+      overflow: hidden;
+    }
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 100px;
+      align-items: center;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-img-frame {
+      position: relative;
+      height: 620px;
+    }
+    .about-img-main {
+      position: absolute;
+      inset: 0;
+      border-radius: 4px;
+      overflow: hidden;
+      background: linear-gradient(145deg, #2e5233, #4c7c3a, #7fa46a);
+    }
+    .about-img-main::before {
+      content: '🌿';
+      font-size: 120px;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.15;
+      filter: grayscale(1) brightness(2);
+    }
+    .about-img-accent {
+      position: absolute;
+      bottom: -30px; right: -30px;
+      width: 200px; height: 200px;
+      border-radius: 4px;
+      background: var(--parchment);
+      border: 8px solid var(--white);
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 4px;
+    }
+    .about-img-accent-num {
+      font-family: var(--serif-display);
+      font-size: 3rem;
+      font-weight: 600;
+      color: var(--forest);
+      line-height: 1;
+    }
+    .about-img-accent-label {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--earth);
+    }
+    .about-year-tag {
+      position: absolute;
+      top: 30px; left: -20px;
+      background: var(--gold);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    .about-text { }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--moss);
+      margin-bottom: 24px;
+    }
+    .section-tag::before {
+      content: '';
+      width: 28px; height: 1px;
+      background: var(--moss);
+    }
+
+    .section-title {
+      font-family: var(--serif-display);
+      font-size: clamp(2.4rem, 4vw, 3.8rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--ink);
+      margin-bottom: 32px;
+      letter-spacing: -0.02em;
+    }
+    .section-title em { font-style: italic; color: var(--forest); }
+
+    .about-body {
+      font-family: var(--sans);
+      font-size: 1.05rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: #4a4a3e;
+      margin-bottom: 20px;
+    }
+
+    .about-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--mist);
+      margin-top: 50px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .stat-item {
+      background: var(--white);
+      padding: 28px 20px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: var(--serif-display);
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: var(--forest);
+      display: block;
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--earth);
+      margin-top: 6px;
+      display: block;
+    }
+
+    /* ─── ACTIVITIES ──────────────────────────────────── */
+    .activities {
+      background: var(--cream);
+      padding: 140px 0;
+    }
+    .activities-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: end;
+      margin-bottom: 80px;
+    }
+    .activities-header p {
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: #5a5a4e;
+    }
+
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+    .activity-card {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      background: var(--forest);
+      cursor: none;
+    }
+    .activity-card:first-child { aspect-ratio: unset; grid-row: span 2; }
+
+    .activity-card-bg {
+      position: absolute; inset: 0;
+      transition: transform 0.8s var(--ease-out-expo);
+    }
+    .activity-card:hover .activity-card-bg { transform: scale(1.08); }
+
+    /* Gradient overlays per card */
+    .card-farm .activity-card-bg   { background: linear-gradient(160deg, #1e3a1e 0%, #3d6b30 50%, #4c7c3a 100%); }
+    .card-duck .activity-card-bg   { background: linear-gradient(160deg, #2a4a2a 0%, #4c7c3a 100%); }
+    .card-cafe .activity-card-bg   { background: linear-gradient(160deg, #4a3020 0%, #8a6445 100%); }
+    .card-workshop .activity-card-bg { background: linear-gradient(160deg, #1e2e1a 0%, #2e5233 100%); }
+
+    .card-icon {
+      position: absolute; top: 32px; left: 32px;
+      font-size: 2.2rem;
+      filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+      z-index: 2;
+      transition: transform 0.4s var(--ease-spring);
+    }
+    .activity-card:hover .card-icon { transform: scale(1.2) rotate(-5deg); }
+
+    .card-content {
+      position: absolute; inset: 0;
+      padding: 32px;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      background: linear-gradient(to top, rgba(20,30,15,0.95) 0%, rgba(20,30,15,0.4) 50%, transparent 100%);
+      z-index: 2;
+    }
+    .card-tag {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .card-title {
+      font-family: var(--serif-display);
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .card-desc {
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(200,213,181,0.85);
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s var(--ease-out-expo), opacity 0.4s;
+      opacity: 0;
+    }
+    .activity-card:hover .card-desc { max-height: 120px; opacity: 1; }
+
+    .card-arrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 16px;
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s 0.05s, transform 0.4s var(--ease-out-expo);
+    }
+    .activity-card:hover .card-arrow { opacity: 1; transform: translateY(0); }
+
+    /* ─── CAFE ────────────────────────────────────────── */
+    .cafe {
+      background: var(--parchment);
+      padding: 140px 0;
+      overflow: hidden;
+    }
+    .cafe-inner {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .cafe-text .section-title { margin-bottom: 24px; }
+    .cafe-body {
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.9;
+      color: #5a5040;
+      margin-bottom: 16px;
+    }
+    .cafe-menu {
+      margin-top: 40px;
+      border-top: 1px solid rgba(138,100,69,0.2);
+    }
+    .menu-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(138,100,69,0.1);
+      font-family: var(--sans);
+      gap: 16px;
+    }
+    .menu-item-left { display: flex; align-items: center; gap: 14px; }
+    .menu-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); flex-shrink: 0; }
+    .menu-name {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .menu-sub {
+      font-size: 0.78rem;
+      font-weight: 300;
+      color: var(--earth);
+      margin-top: 2px;
+      letter-spacing: 0.04em;
+    }
+    .menu-badge {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      background: var(--mist);
+      color: var(--forest);
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+    .menu-badge.organic { background: var(--forest); color: var(--mist); }
+
+    .cafe-visual {
+      position: relative;
+    }
+    .cafe-img-stack {
+      position: relative;
+      height: 600px;
+    }
+    .cafe-img-a {
+      position: absolute;
+      top: 0; left: 0; right: 40px; bottom: 60px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #8a6445 0%, #c4936a 50%, #e8c49a 100%);
+      overflow: hidden;
+    }
+    .cafe-img-a::after {
+      content: '☕';
+      font-size: 100px;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.15;
+    }
+    .cafe-img-b {
+      position: absolute;
+      bottom: 0; right: 0;
+      width: 200px; height: 240px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #2e5233 0%, #7fa46a 100%);
+      border: 8px solid var(--parchment);
+      overflow: hidden;
+    }
+    .cafe-img-b::after {
+      content: '🧇';
+      font-size: 60px;
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.3;
+    }
+    .cafe-hours {
+      position: absolute;
+      top: 30px; right: 20px;
+      background: var(--gold);
+      color: var(--ink);
+      padding: 16px 20px;
+      text-align: center;
+      font-family: var(--sans);
+    }
+    .cafe-hours-time {
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: block;
+    }
+    .cafe-hours-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* ─── GALLERY ─────────────────────────────────────── */
+    .gallery-section {
+      background: var(--ink);
+      padding: 140px 0;
+      overflow: hidden;
+    }
+    .gallery-header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      margin-bottom: 60px;
+    }
+    .gallery-header .section-title { color: var(--white); margin-bottom: 0; }
+    .gallery-header .section-title em { color: var(--sage); }
+    .gallery-header .section-tag { color: var(--gold); }
+    .gallery-header .section-tag::before { background: var(--gold); }
+    .gallery-view-all {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sage);
+      text-decoration: none;
+      display: flex; align-items: center; gap: 10px;
+      transition: color 0.2s;
+    }
+    .gallery-view-all:hover { color: var(--gold); }
+
+    .gallery-masonry {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 200px 200px;
+      gap: 4px;
+    }
+    .g-item {
+      position: relative;
+      overflow: hidden;
+      cursor: none;
+    }
+    .g-item:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+
+    .g-item-bg {
+      position: absolute; inset: 0;
+      transition: transform 0.8s var(--ease-out-expo);
+    }
+    .g-item:hover .g-item-bg { transform: scale(1.06); }
+
+    .g-item:nth-child(1) .g-item-bg { background: linear-gradient(135deg, #1e3a1e 0%, #4c7c3a 60%, #7fa46a 100%); }
+    .g-item:nth-child(2) .g-item-bg { background: linear-gradient(135deg, #3d2a1e 0%, #8a6445 100%); }
+    .g-item:nth-child(3) .g-item-bg { background: linear-gradient(135deg, #1e2e1a 0%, #2e5233 100%); }
+    .g-item:nth-child(4) .g-item-bg { background: linear-gradient(135deg, #2a3a20 0%, #4c7c3a 100%); }
+    .g-item:nth-child(5) .g-item-bg { background: linear-gradient(135deg, #4a3820 0%, #c4936a 100%); }
+
+    .g-item-emoji {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .g-item-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(10,20,8,0.85), transparent 60%);
+      z-index: 2;
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .g-item:hover .g-item-overlay { opacity: 1; }
+    .g-item-label {
+      position: absolute; bottom: 20px; left: 24px;
+      font-family: var(--serif-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      z-index: 3;
+      transform: translateY(8px);
+      opacity: 0;
+      transition: opacity 0.4s, transform 0.4s var(--ease-out-expo);
+    }
+    .g-item:hover .g-item-label { opacity: 1; transform: translateY(0); }
+
+    /* ─── LOCATION ────────────────────────────────────── */
+    .location-section {
+      background: var(--cream);
+      padding: 140px 0;
+    }
+    .location-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+    .location-map {
+      position: relative;
+      height: 450px;
+      background: var(--mist);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .map-placeholder {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #c8d5b5 0%, #a8c090 50%, #7fa46a 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px;
+    }
+    .map-placeholder-icon { font-size: 3rem; }
+    .map-placeholder-text {
+      font-family: var(--serif-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--forest);
+    }
+    .map-pin {
+      position: absolute;
+      width: 24px; height: 24px;
+      background: var(--forest);
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      top: 50%; left: 50%;
+      margin-top: -12px; margin-left: -12px;
+      box-shadow: 0 4px 16px rgba(46,82,51,0.4);
+    }
+    .map-pin::after {
+      content: '';
+      position: absolute;
+      width: 8px; height: 8px;
+      background: var(--white);
+      border-radius: 50%;
+      top: 8px; left: 8px;
+    }
+
+    .location-info { padding-top: 16px; }
+    .location-info .section-title { margin-bottom: 32px; }
+    .info-list { list-style: none; }
+    .info-item {
+      display: flex; gap: 20px;
+      padding: 24px 0;
+      border-bottom: 1px solid rgba(76,124,58,0.1);
+    }
+    .info-item:first-child { padding-top: 0; }
+    .info-icon {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      background: var(--forest);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .info-title {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 6px;
+    }
+    .info-body {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .cta-block {
+      margin-top: 48px;
+      background: var(--forest);
+      padding: 36px;
+      border-radius: 4px;
+      text-align: center;
+    }
+    .cta-block-title {
+      font-family: var(--serif-display);
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .cta-block-title em { font-style: italic; color: var(--sage); }
+    .cta-block-sub {
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      color: rgba(200,213,181,0.7);
+      margin-bottom: 24px;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--gold);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 14px 36px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.3s, transform 0.3s var(--ease-spring);
+    }
+    .btn-primary:hover {
+      background: var(--clay);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+
+    /* ─── FOOTER ──────────────────────────────────────── */
+    footer {
+      background: #0e1a0f;
+      padding: 80px 0 40px;
+      position: relative;
+      overflow: hidden;
+    }
+    footer::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(127,164,106,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(127,164,106,0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 60px;
+      padding-bottom: 60px;
+      border-bottom: 1px solid rgba(127,164,106,0.15);
+      position: relative;
+    }
+    .footer-brand-name {
+      font-family: var(--serif-display);
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .footer-brand-name em { color: var(--sage); font-style: italic; }
+    .footer-tagline {
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: rgba(200,213,181,0.5);
+      line-height: 1.7;
+      max-width: 260px;
+    }
+    .footer-organic-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 24px;
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--sage);
+      background: rgba(76,124,58,0.15);
+      padding: 8px 14px;
+      border-radius: 2px;
+      border: 1px solid rgba(76,124,58,0.25);
+    }
+    .footer-col-title {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .footer-links { list-style: none; }
+    .footer-links li { margin-bottom: 12px; }
+    .footer-links a {
+      font-family: var(--sans);
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: rgba(200,213,181,0.55);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--sage); }
+    .footer-contact-item {
+      display: flex; gap: 12px;
+      margin-bottom: 14px;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      font-weight: 300;
+      color: rgba(200,213,181,0.55);
+      line-height: 1.6;
+    }
+    .footer-contact-item span:first-child { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+    .footer-bottom {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 30px;
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 300;
+      color: rgba(200,213,181,0.3);
+      position: relative;
+    }
+
+    /* ─── SCROLL ANIMATIONS ───────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 18px 24px; }
+      nav.scrolled { padding: 12px 24px; }
+      .nav-links { display: none; }
+      .container { padding: 0 24px; }
+      .about-inner, .cafe-inner, .location-inner { grid-template-columns: 1fr; gap: 48px; }
+      .about-img-frame { height: 380px; }
+      .cafe-img-stack { height: 320px; }
+      .activities-header { grid-template-columns: 1fr; }
+      .activity-grid { grid-template-columns: 1fr 1fr; }
+      .activity-card:first-child { grid-row: span 1; aspect-ratio: 3/4; }
+      .gallery-masonry { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .g-item:nth-child(1) { grid-column: span 2; }
+      .footer-inner { grid-template-columns: 1fr; gap: 40px; }
+      .about-stats { grid-template-columns: 1fr 1fr 1fr; }
+      section { padding: 80px 0; }
+      .about, .activities, .cafe, .gallery-section, .location-section { padding: 80px 0; }
+    }
+
+    @media (max-width: 500px) {
+      .hero-title { font-size: 3.2rem; }
+      .activity-grid { grid-template-columns: 1fr; }
+      .gallery-masonry { grid-template-columns: 1fr; }
+      .g-item:nth-child(1) { grid-column: span 1; }
+    }
+  </style>
 </head>
 <body>
 
-    <div class="grid-overlay"></div>
+  <!-- Cursor -->
+  <div id="cursor-dot"></div>
+  <div id="cursor-ring"></div>
 
-    <header class="hero">
-        <h1>บางกะเจ้าฟาร์ม</h1>
-        <p>หลีกหนีความวุ่นวาย มาพักกายใจที่ฟาร์มออร์แกนิกกลาง "ปอดกรุงเทพฯ"</p>
-    </header>
+  <!-- NAV -->
+  <nav id="main-nav">
+    <a href="#" class="nav-logo">บางกะเจ้าฟาร์ม</a>
+    <ul class="nav-links">
+      <li><a href="#about">เกี่ยวกับเรา</a></li>
+      <li><a href="#activities">กิจกรรม</a></li>
+      <li><a href="#cafe">Farm Café</a></li>
+      <li><a href="#gallery">แกลลอรี่</a></li>
+      <li><a href="#visit">มาเยี่ยมเรา</a></li>
+    </ul>
+  </nav>
 
-    <div class="container">
-        
-        <div class="section">
-            <div class="section-text">
-                <h2>เกี่ยวกับเรา</h2>
-                <p>จากความตั้งใจของเกษตรกรกว่า 17 รายที่รวมกลุ่มกัน เกิดเป็น <strong>"บางกะเจ้าฟาร์ม"</strong> แหล่งท่องเที่ยวเชิงเกษตรแบบออร์แกนิกในคุ้งบางกะเจ้า เรามุ่งเน้นการปลูกพืชผักและปศุสัตว์แบบปลอดสารพิษ เพื่อส่งมอบความสดชื่น ร่มรื่น และพื้นที่แห่งความสุขให้กับทุกคน</p>
-            </div>
-            <div class="tilt-container">
-                <div class="tilt-img">
-                    <img src="616027847_1352836976646112_228921416635449356_n.jpg" alt="บรรยากาศด้านหน้าบางกะเจ้าฟาร์ม">
-                </div>
-            </div>
-        </div>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="leaf-bg" id="leafBg"></div>
 
-        <div class="section reverse">
-            <div class="section-text">
-                <h2>กิจกรรมและแปลงฟาร์ม</h2>
-                <p>เดินเล่นรับลมชมแปลงผักออร์แกนิกนานาชนิด แวะทักทายฝูงเป็ดและห่านที่เดินเตาะแตะอย่างอิสระซึ่งเป็นไฮไลท์ของฟาร์ม นอกจากนี้ยังมีโรงเพาะเห็ดสไตล์ญี่ปุ่น และกิจกรรมเวิร์กชอปทำผลิตภัณฑ์จากธรรมชาติให้คุณได้ร่วมสนุก</p>
-            </div>
-            <div class="tilt-container">
-                <div class="tilt-img">
-                    <img src="638872896_1383911093538700_7929235259754230361_n.jpg" alt="แปลงผักออร์แกนิก">
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <div class="section-text">
-                <h2>Farm Café & Restaurant</h2>
-                <p>พักจิบเครื่องดื่มเย็นๆ กาแฟหอมกรุ่น และวาฟเฟิลแสนอร่อยที่ Farm Café พร้อมชิมอาหารที่ปรุงจากวัตถุดิบออร์แกนิกสดๆ จากฟาร์ม (เช่น เลมอนชิกเก้น) อย่าลืมขึ้นไปนั่งชิลที่โซนชั้น 2 เพื่อชมวิวทิวทัศน์สีเขียวของฟาร์มแบบพาโนรามา</p>
-            </div>
-            <div class="tilt-container">
-                <div class="tilt-img">
-                    <img src="658833253_1413965427199933_5421865744624748009_n.jpg" alt="บรรยากาศร้านคาเฟ่">
-                </div>
-            </div>
-        </div>
-
-        <div class="gallery-title">
-            <h2>แกลลอรี่</h2>
-        </div>
-        <div class="gallery">
-            <div class="tilt-container">
-                <div class="tilt-img">
-                    <img src="657149634_1413965210533288_946991795011280789_n.jpg" alt="ฝูงเป็ดริมน้ำ">
-                </div>
-            </div>
-            <div class="tilt-container">
-                <div class="tilt-img">
-                    <img src="660601935_1415624230367386_2798272487091556794_n.jpg" alt="ผักออร์แกนิกสดๆ">
-                </div>
-            </div>
-            <div class="tilt-container">
-                <div class="tilt-img">
-                    <img src="616027847_1352836976646112_228921416635449356_n.jpg" alt="ตัวอาคารฟาร์ม">
-                </div>
-            </div>
-            <div class="tilt-container">
-                <div class="tilt-img">
-                    <img src="658833253_1413965427199933_5421865744624748009_n.jpg" alt="บรรยากาศคาเฟ่">
-                </div>
-            </div>
-        </div>
-
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span>ปอดของกรุงเทพฯ</span>
+        <span>·</span>
+        <span>คุ้งบางกะเจ้า</span>
+      </div>
+      <h1 class="hero-title">
+        บางกะเจ้า
+        <em>ฟาร์ม</em>
+        <strong>Organic</strong>
+      </h1>
+      <p class="hero-subtitle">หลีกหนีความวุ่นวาย — มาพักกายใจท่ามกลางธรรมชาติสีเขียวขจีของฟาร์มออร์แกนิกที่เชื่อมคนกลับสู่แผ่นดิน</p>
+      <a href="#about" class="hero-cta">
+        สำรวจฟาร์ม
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
     </div>
 
-    <footer>
-        <h3>ติดต่อเรา</h3>
-        <p><i class="ti ti-map-pin"></i> ซอยเพชรหึงษ์ 21 ตำบลบางยอ อำเภอพระประแดง จังหวัดสมุทรปราการ</p>
-        <p><i class="ti ti-clock"></i> เปิดให้บริการทุกวัน เวลา 09:30 น. - 16:30 น.</p>
-        <p style="margin-top: 40px; font-size: 0.9em; opacity: 0.7;">© 2026 Bangkachao Farm. All rights reserved.</p>
-    </footer>
+    <div class="hero-scroll">
+      <span>เลื่อนลง</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
 
-    <script>
-        // 1. Grid ตามเมาส์
-        document.addEventListener('mousemove', (e) => {
-            document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
-            document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
-        });
+  <!-- MARQUEE -->
+  <div class="marquee-band" aria-hidden="true">
+    <div class="marquee-track" id="marqueeTrack">
+      <!-- duplicated in JS -->
+    </div>
+  </div>
 
-        // 2. เอฟเฟกต์รูปภาพ 3D พร้อมระบบ Spring Bounce กลับนุ่มนวล
-        const tiltContainers = document.querySelectorAll('.tilt-container');
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container">
+      <div class="about-inner">
+        <div class="about-visual reveal">
+          <div class="about-img-frame">
+            <div class="about-img-main">
+              <img src="616027847_1352836976646112_228921416635449356_n.jpg"
+                   alt="บรรยากาศบางกะเจ้าฟาร์ม"
+                   style="width:100%;height:100%;object-fit:cover;border-radius:4px;opacity:0.9"
+                   onerror="this.style.display='none'">
+            </div>
+            <div class="about-img-accent">
+              <span class="about-img-accent-num">17</span>
+              <span class="about-img-accent-label">กลุ่มเกษตรกร</span>
+            </div>
+            <div class="about-year-tag">Est. 2020</div>
+          </div>
+        </div>
 
-        tiltContainers.forEach(container => {
-            const imgEl = container.querySelector('.tilt-img');
+        <div class="about-text">
+          <div class="section-tag reveal">เกี่ยวกับเรา</div>
+          <h2 class="section-title reveal reveal-delay-1">
+            จากรากแผ่นดิน<br>
+            <em>สู่ความสดชื่น</em>
+          </h2>
+          <p class="about-body reveal reveal-delay-2">
+            บางกะเจ้าฟาร์มเกิดจากความตั้งใจของ <strong>เกษตรกรกว่า 17 ราย</strong> ที่รวมกลุ่มกันเพื่อสร้างพื้นที่เกษตรอินทรีย์อย่างแท้จริง ในคุ้งบางกะเจ้า — พื้นที่สีเขียวที่ได้รับการขนานนามว่า "ปอดของกรุงเทพมหานคร"
+          </p>
+          <p class="about-body reveal reveal-delay-3">
+            เราปลูกพืชผักและเลี้ยงสัตว์แบบปลอดสารพิษ 100% โดยไม่ใช้สารเคมีสังเคราะห์ใดๆ มุ่งส่งมอบทั้งความสดชื่น ร่มรื่น และประสบการณ์ที่ใกล้ชิดธรรมชาติอย่างแท้จริงให้กับทุกคนที่แวะมาเยือน
+          </p>
+          <div class="about-stats reveal reveal-delay-4">
+            <div class="stat-item">
+              <span class="stat-num">17</span>
+              <span class="stat-label">เกษตรกร</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">100%</span>
+              <span class="stat-label">ออร์แกนิก</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-num">09–16</span>
+              <span class="stat-label">น. ทุกวัน</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-            // เมื่อเมาส์เข้ามาในกรอบ: ปรับ Transition ให้น้อยลงเพื่อตามเมาส์ได้ทันที
-            container.addEventListener('mouseenter', () => {
-                imgEl.style.transition = 'transform 0.1s ease-out, box-shadow 0.1s ease-out';
-            });
+  <!-- ACTIVITIES -->
+  <section class="activities" id="activities">
+    <div class="container">
+      <div class="activities-header">
+        <div>
+          <div class="section-tag reveal">กิจกรรม & ประสบการณ์</div>
+          <h2 class="section-title reveal reveal-delay-1">
+            สิ่งที่คุณจะ<br>
+            <em>ได้สัมผัส</em>
+          </h2>
+        </div>
+        <p class="reveal reveal-delay-2">
+          ตื่นตาตื่นใจกับความหลากหลายของกิจกรรมในฟาร์ม ตั้งแต่การเดินเล่นชมธรรมชาติ ทำกิจกรรมเชิงปฏิบัติการ ไปจนถึงการพักผ่อนหย่อนใจในบรรยากาศร่มรื่น
+        </p>
+      </div>
 
-            // คำนวณองศาตามเมาส์
-            container.addEventListener('mousemove', (e) => {
-                const rect = container.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                
-                const rotateX = ((y - centerY) / centerY) * -15; // ปรับความแรงการหมุนตรงนี้
-                const rotateY = ((x - centerX) / centerX) * 15;
+      <div class="activity-grid">
+        <div class="activity-card card-farm reveal">
+          <div class="activity-card-bg">
+            <img src="638872896_1383911093538700_7929235259754230361_n.jpg"
+                 alt="แปลงผักออร์แกนิก"
+                 style="width:100%;height:100%;object-fit:cover;opacity:0.7"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="card-icon">🌱</div>
+          <div class="card-content">
+            <div class="card-tag">Highlight</div>
+            <div class="card-title">แปลงผักออร์แกนิก</div>
+            <div class="card-desc">เดินเล่นรับลมชมแปลงผักนานาชนิดที่ปลูกแบบอินทรีย์ พร้อมโรงเพาะเห็ดสไตล์ญี่ปุ่น เรียนรู้วิถีเกษตรธรรมชาติอย่างใกล้ชิด</div>
+            <div class="card-arrow">เรียนรู้เพิ่มเติม →</div>
+          </div>
+        </div>
 
-                imgEl.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                imgEl.style.boxShadow = `${-rotateY * 1.5}px ${rotateX * 1.5}px 30px rgba(76, 114, 58, 0.3)`;
-            });
+        <div class="activity-card card-duck reveal reveal-delay-1">
+          <div class="activity-card-bg">
+            <img src="657149634_1413965210533288_946991795011280789_n.jpg"
+                 alt="ฝูงเป็ดและห่าน"
+                 style="width:100%;height:100%;object-fit:cover;opacity:0.7"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="card-icon">🦆</div>
+          <div class="card-content">
+            <div class="card-tag">สัตว์เลี้ยง</div>
+            <div class="card-title">ฝูงเป็ดและห่าน</div>
+            <div class="card-desc">พบกับฝูงเป็ดและห่านที่เดินเตาะแตะอย่างอิสระ จุดถ่ายรูปยอดฮิตที่คุณต้องหยุดยิ้มทุกครั้ง</div>
+            <div class="card-arrow">ดูรูปภาพ →</div>
+          </div>
+        </div>
 
-            // **ไฮไลท์** เมื่อเมาส์ออก: เพิ่มเวลา Transition และใส่ cubic-bezier ให้ดูหน่วงและมีแรงสปริงเบาๆ
-            container.addEventListener('mouseleave', () => {
-                imgEl.style.transition = 'transform 0.8s cubic-bezier(0.2, 1.2, 0.3, 1), box-shadow 0.8s ease';
-                imgEl.style.transform = 'rotateX(0deg) rotateY(0deg)';
-                imgEl.style.boxShadow = '0 15px 30px rgba(0,0,0,0.1)';
-            });
-        });
-    </script>
+        <div class="activity-card card-cafe reveal reveal-delay-2">
+          <div class="activity-card-bg">
+            <img src="658833253_1413965427199933_5421865744624748009_n.jpg"
+                 alt="Farm Café"
+                 style="width:100%;height:100%;object-fit:cover;opacity:0.65"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="card-icon">☕</div>
+          <div class="card-content">
+            <div class="card-tag">Farm Café</div>
+            <div class="card-title">คาเฟ่ & ร้านอาหาร</div>
+            <div class="card-desc">กาแฟหอมกรุ่น วาฟเฟิลสด และเมนูออร์แกนิกจากวัตถุดิบฟาร์ม พร้อมวิวพาโนรามาจากชั้น 2</div>
+            <div class="card-arrow">ดูเมนู →</div>
+          </div>
+        </div>
+
+        <div class="activity-card card-workshop reveal reveal-delay-3">
+          <div class="activity-card-bg">
+            <img src="660601935_1415624230367386_2798272487091556794_n.jpg"
+                 alt="Workshop"
+                 style="width:100%;height:100%;object-fit:cover;opacity:0.65"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="card-icon">🧪</div>
+          <div class="card-content">
+            <div class="card-tag">เวิร์กชอป</div>
+            <div class="card-title">Workshop ธรรมชาติ</div>
+            <div class="card-desc">เรียนทำผลิตภัณฑ์จากธรรมชาติ พาสนุก พาเรียนรู้ในบรรยากาศร่มรื่น เหมาะสำหรับทุกวัย</div>
+            <div class="card-arrow">ดูกำหนดการ →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAFE -->
+  <section class="cafe" id="cafe">
+    <div class="container">
+      <div class="cafe-inner">
+        <div class="cafe-text">
+          <div class="section-tag reveal">Farm Café & Restaurant</div>
+          <h2 class="section-title reveal reveal-delay-1">
+            รสชาติจากฟาร์ม<br>
+            <em>สดใหม่ทุกวัน</em>
+          </h2>
+          <p class="cafe-body reveal reveal-delay-2">
+            พักจิบกาแฟและเครื่องดื่มเย็นๆ ที่ Farm Café ของเรา เพลิดเพลินกับเมนูที่คัดสรรวัตถุดิบสดใหม่จากแปลงผักภายในฟาร์มโดยตรง
+          </p>
+          <p class="cafe-body reveal reveal-delay-2">
+            อย่าลืมขึ้นไปนั่งชิลล์ที่<strong>โซนชั้น 2</strong> เพื่อชมวิวทิวทัศน์สีเขียวของฟาร์มแบบพาโนรามา — มุมพักผ่อนที่สมบูรณ์แบบที่สุด
+          </p>
+          <div class="cafe-menu reveal reveal-delay-3">
+            <div class="menu-item">
+              <div class="menu-item-left">
+                <div class="menu-dot"></div>
+                <div>
+                  <div class="menu-name">กาแฟและเครื่องดื่ม</div>
+                  <div class="menu-sub">Espresso · Cold Brew · Herbal Tea</div>
+                </div>
+              </div>
+              <span class="menu-badge">ทุกวัน</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-left">
+                <div class="menu-dot"></div>
+                <div>
+                  <div class="menu-name">วาฟเฟิล & ของว่าง</div>
+                  <div class="menu-sub">สดใหม่ทุกเช้า</div>
+                </div>
+              </div>
+              <span class="menu-badge">ขายดี</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-left">
+                <div class="menu-dot"></div>
+                <div>
+                  <div class="menu-name">เลมอนชิกเก้น</div>
+                  <div class="menu-sub">วัตถุดิบออร์แกนิกจากฟาร์ม</div>
+                </div>
+              </div>
+              <span class="menu-badge organic">Organic</span>
+            </div>
+            <div class="menu-item">
+              <div class="menu-item-left">
+                <div class="menu-dot"></div>
+                <div>
+                  <div class="menu-name">ผักสดออร์แกนิก</div>
+                  <div class="menu-sub">เก็บสดจากแปลงทุกวัน</div>
+                </div>
+              </div>
+              <span class="menu-badge organic">Farm Fresh</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cafe-visual reveal reveal-delay-2">
+          <div class="cafe-img-stack">
+            <div class="cafe-img-a">
+              <img src="658833253_1413965427199933_5421865744624748009_n.jpg"
+                   alt="บรรยากาศคาเฟ่"
+                   style="width:100%;height:100%;object-fit:cover;opacity:0.85;border-radius:4px"
+                   onerror="this.style.display='none'">
+            </div>
+            <div class="cafe-img-b">
+              <img src="660601935_1415624230367386_2798272487091556794_n.jpg"
+                   alt="เมนูฟาร์ม"
+                   style="width:100%;height:100%;object-fit:cover;opacity:0.85"
+                   onerror="this.style.display='none'">
+            </div>
+            <div class="cafe-hours">
+              <span class="cafe-hours-time">09:30–16:30</span>
+              <span class="cafe-hours-label">เปิดทุกวัน</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-section" id="gallery">
+    <div class="container">
+      <div class="gallery-header">
+        <div>
+          <div class="section-tag reveal">แกลลอรี่</div>
+          <h2 class="section-title reveal reveal-delay-1">
+            ช่วงเวลาสวยงาม<br>
+            <em>ในฟาร์มของเรา</em>
+          </h2>
+        </div>
+        <a href="#" class="gallery-view-all reveal">
+          ดูทั้งหมด
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+
+      <div class="gallery-masonry reveal">
+        <div class="g-item">
+          <div class="g-item-bg">
+            <img src="616027847_1352836976646112_228921416635449356_n.jpg"
+                 alt="ฟาร์ม"
+                 style="width:100%;height:100%;object-fit:cover"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="g-item-emoji">🌿</div>
+          <div class="g-item-overlay"></div>
+          <div class="g-item-label">บรรยากาศฟาร์ม</div>
+        </div>
+        <div class="g-item">
+          <div class="g-item-bg">
+            <img src="657149634_1413965210533288_946991795011280789_n.jpg"
+                 alt="เป็ดและห่าน"
+                 style="width:100%;height:100%;object-fit:cover"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="g-item-emoji">🦆</div>
+          <div class="g-item-overlay"></div>
+          <div class="g-item-label">ฝูงเป็ดน้อย</div>
+        </div>
+        <div class="g-item">
+          <div class="g-item-bg">
+            <img src="638872896_1383911093538700_7929235259754230361_n.jpg"
+                 alt="แปลงผัก"
+                 style="width:100%;height:100%;object-fit:cover"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="g-item-emoji">🥬</div>
+          <div class="g-item-overlay"></div>
+          <div class="g-item-label">แปลงผักอินทรีย์</div>
+        </div>
+        <div class="g-item">
+          <div class="g-item-bg">
+            <img src="660601935_1415624230367386_2798272487091556794_n.jpg"
+                 alt="ผักสด"
+                 style="width:100%;height:100%;object-fit:cover"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="g-item-emoji">🌾</div>
+          <div class="g-item-overlay"></div>
+          <div class="g-item-label">ผลผลิตสด</div>
+        </div>
+        <div class="g-item">
+          <div class="g-item-bg">
+            <img src="658833253_1413965427199933_5421865744624748009_n.jpg"
+                 alt="คาเฟ่"
+                 style="width:100%;height:100%;object-fit:cover"
+                 onerror="this.style.display='none'">
+          </div>
+          <div class="g-item-emoji">☕</div>
+          <div class="g-item-overlay"></div>
+          <div class="g-item-label">Farm Café</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VISIT / LOCATION -->
+  <section class="location-section" id="visit">
+    <div class="container">
+      <div class="location-inner">
+        <div class="reveal">
+          <div class="location-map">
+            <div class="map-placeholder">
+              <div class="map-placeholder-icon">🗺️</div>
+              <div class="map-placeholder-text">คุ้งบางกะเจ้า, สมุทรปราการ</div>
+            </div>
+            <div class="map-pin"></div>
+          </div>
+        </div>
+
+        <div class="location-info">
+          <div class="section-tag reveal">มาเยี่ยมเรา</div>
+          <h2 class="section-title reveal reveal-delay-1">
+            เดินทางมา<br>
+            <em>บางกะเจ้าฟาร์ม</em>
+          </h2>
+          <ul class="info-list">
+            <li class="info-item reveal reveal-delay-2">
+              <div class="info-icon">📍</div>
+              <div>
+                <div class="info-title">ที่อยู่</div>
+                <div class="info-body">ซอยเพชรหึงษ์ 21 ตำบลบางยอ<br>อำเภอพระประแดง จังหวัดสมุทรปราการ</div>
+              </div>
+            </li>
+            <li class="info-item reveal reveal-delay-3">
+              <div class="info-icon">⏰</div>
+              <div>
+                <div class="info-title">เวลาทำการ</div>
+                <div class="info-body">เปิดให้บริการทุกวัน<br>09:30 น. – 16:30 น.</div>
+              </div>
+            </li>
+            <li class="info-item reveal reveal-delay-4">
+              <div class="info-icon">🚗</div>
+              <div>
+                <div class="info-title">การเดินทาง</div>
+                <div class="info-body">จากกรุงเทพฯ ใช้เวลาเพียง 30–45 นาที<br>ผ่านสะพานข้ามแม่น้ำเจ้าพระยา</div>
+              </div>
+            </li>
+          </ul>
+
+          <div class="cta-block reveal">
+            <div class="cta-block-title">พร้อมมาเยี่ยมเรา<em>แล้วหรือยัง?</em></div>
+            <div class="cta-block-sub">ไม่ต้องจองล่วงหน้า — มาได้เลยทุกวัน</div>
+            <a href="https://maps.google.com/?q=บางกะเจ้าฟาร์ม" target="_blank" class="btn-primary">
+              เปิดใน Google Maps
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M2 12L12 2M12 2H6M12 2v6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div>
+          <div class="footer-brand-name">บางกะเจ้า<em>ฟาร์ม</em></div>
+          <div class="footer-tagline">ฟาร์มออร์แกนิกกลางปอดกรุงเทพฯ — พื้นที่แห่งธรรมชาติ ความสงบ และรอยยิ้มสำหรับทุกคน</div>
+          <div class="footer-organic-badge">🌿 Certified Organic Farm</div>
+        </div>
+        <div>
+          <div class="footer-col-title">เมนูหลัก</div>
+          <ul class="footer-links">
+            <li><a href="#about">เกี่ยวกับเรา</a></li>
+            <li><a href="#activities">กิจกรรม & ประสบการณ์</a></li>
+            <li><a href="#cafe">Farm Café & Restaurant</a></li>
+            <li><a href="#gallery">แกลลอรี่</a></li>
+            <li><a href="#visit">แผนที่และการเดินทาง</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="footer-col-title">ติดต่อเรา</div>
+          <div class="footer-contact-item">
+            <span>📍</span>
+            <span>ซอยเพชรหึงษ์ 21 ต.บางยอ อ.พระประแดง จ.สมุทรปราการ</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>⏰</span>
+            <span>เปิดทุกวัน 09:30 – 16:30 น.</span>
+          </div>
+          <div class="footer-contact-item">
+            <span>🌿</span>
+            <span>Organic · Sustainable · Local</span>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Bangkachao Farm. All rights reserved.</span>
+        <span>ปอดของกรุงเทพฯ · คุ้งบางกะเจ้า</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ─── CURSOR ───────────────────────────────── */
+    const dot  = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let rx = 0, ry = 0, dx = 0, dy = 0;
+
+    document.addEventListener('mousemove', e => {
+      dx = e.clientX; dy = e.clientY;
+      dot.style.left = dx + 'px';
+      dot.style.top  = dy + 'px';
+    });
+    (function animRing() {
+      rx += (dx - rx) * 0.15;
+      ry += (dy - ry) * 0.15;
+      ring.style.left = rx + 'px';
+      ring.style.top  = ry + 'px';
+      requestAnimationFrame(animRing);
+    })();
+
+    document.querySelectorAll('a, button, .activity-card, .g-item').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    /* ─── NAV SCROLL ───────────────────────────── */
+    const nav = document.getElementById('main-nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    /* ─── MARQUEE ──────────────────────────────── */
+    const items = ['ออร์แกนิก 100%','ปลอดสารพิษ','ฟาร์มสด','คุ้งบางกะเจ้า','Farm Fresh','เปิดทุกวัน','17 เกษตรกร','ปอดกรุงเทพฯ','Organic Farm','สดจากแปลง','เป็ดน้อยน่ารัก','เวิร์กชอป'];
+    const track = document.getElementById('marqueeTrack');
+    const full  = [...items, ...items];
+    track.innerHTML = full.map(t => `<span class="marquee-item"><span class="marquee-dot"></span>${t}</span>`).join('');
+
+    /* ─── LEAF BG ───────────────────────────────── */
+    const leafBg = document.getElementById('leafBg');
+    for (let i = 0; i < 14; i++) {
+      const l = document.createElement('div');
+      l.className = 'leaf';
+      const s  = Math.random() * 120 + 40;
+      const tx = (Math.random() - 0.5) * 400;
+      const ty = -(Math.random() * 600 + 200);
+      const r  = Math.random() * 360;
+      const sc = Math.random() * 0.8 + 0.6;
+      const dur = Math.random() * 20 + 20;
+      const del = Math.random() * 20;
+      Object.assign(l.style, {
+        width: s + 'px', height: s + 'px',
+        left: (Math.random() * 100) + 'vw',
+        bottom: '-200px',
+        '--tx': tx + 'px', '--ty': ty + 'px',
+        '--r': r + 'deg', '--s': sc,
+        animationDuration: dur + 's',
+        animationDelay: del + 's',
+      });
+      leafBg.appendChild(l);
+    }
+
+    /* ─── SCROLL REVEAL ─────────────────────────── */
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+
+    /* ─── MOUSE GRID OVERLAY ─────────────────────── */
+    document.addEventListener('mousemove', e => {
+      document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+      document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+    });
+  </script>
 </body>
 </html>
